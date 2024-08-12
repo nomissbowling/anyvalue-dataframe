@@ -1,0 +1,25 @@
+[package]
+name = "anyvalue-dataframe"
+version = "0.1.0" # change with html_root_url in lib.rs
+edition = "2021"
+authors = ["nomissbowling <nomissbowling@yahoo.co.jp>"]
+
+description = "Rust utilities for Vec AnyValue of polars DataFrame"
+keywords = ["anyvalue", "dataframe", "polars", "plotters", "sqlite"]
+categories = ["development-tools", "database", "data-structures"]
+license = "MIT"
+
+documentation = "https://docs.rs/anyvalue-dataframe/"
+homepage = "https://crates.io/crates/anyvalue-dataframe"
+repository = "https://github.com/nomissbowling/anyvalue-dataframe"
+
+readme = "README.md"
+
+#build = "build.rs"
+
+[lib]
+name = "anyvalue_dataframe"
+
+[dependencies]
+polars-utils = { version = "=0.25.1" }
+polars = { version = "=0.25.1", features = ["describe", "lazy", "object", "strings", "dtype-full", "dtype-categorical", "list_eval", "rows", "round_series", "rank"] }
