@@ -1,11 +1,65 @@
-#![doc(html_root_url = "https://docs.rs/anyvalue-dataframe/0.1.0")]
+#![doc(html_root_url = "https://docs.rs/anyvalue-dataframe/0.1.1")]
 //! anyvalue dataframe
 //!
 
 use std::error::Error;
 use polars::prelude::{DataFrame, AnyValue, Schema, Field, DataType};
 
-/// to anyvalue from value and datatype
+/// from anyvalue and datatype to primitive value
+#[macro_export]
+macro_rules! from_any {
+  ($a: expr, DataType::Int64) => {
+    match $a { AnyValue::Int64(i) => i, _ => 0 }
+  };
+  ($a: expr, DataType::Int32) => {
+    match $a { AnyValue::Int32(i) => i, _ => 0 }
+  };
+  ($a: expr, DataType::Int16) => {
+    match $a { AnyValue::Int16(i) => i, _ => 0 }
+  };
+  ($a: expr, DataType::Int8) => {
+    match $a { AnyValue::Int8(i) => i, _ => 0 }
+  };
+  ($a: expr, DataType::UInt64) => {
+    match $a { AnyValue::UInt64(u) => u, _ => 0 }
+  };
+  ($a: expr, DataType::UInt32) => {
+    match $a { AnyValue::UInt32(u) => u, _ => 0 }
+  };
+  ($a: expr, DataType::UInt16) => {
+    match $a { AnyValue::UInt16(u) => u, _ => 0 }
+  };
+  ($a: expr, DataType::UInt8) => {
+    match $a { AnyValue::UInt8(u) => u, _ => 0 }
+  };
+  ($a: expr, DataType::Float64) => {
+    match $a { AnyValue::Float64(f) => f, _ => 0.0 }
+  };
+  ($a: expr, DataType::Float32) => {
+    match $a { AnyValue::Float32(f) => f, _ => 0.0 }
+  };
+  ($a: expr, DataType::Utf8) => { // polars 0.25.1
+    match $a { AnyValue::Utf8(s) => s, _ => "" }
+  };
+  ($a: expr, DataType::String) => { // polars latest
+    match $a { AnyValue::String(s) => s, _ => "".to_string() }
+  };
+  ($a: expr, DataType::Boolean) => {
+    match $a { AnyValue::Boolean(b) => b, _ => false }
+  };
+  ($a: expr, DataType::BinaryOwned) => { // must match with reference
+    match &$a { AnyValue::BinaryOwned(u) => u.clone(), _ => vec![] }
+  };
+  ($a: expr, DataType::Binary) => { // must match with reference
+    match &$a { AnyValue::Binary(u) => u.to_vec(), _ => vec![] }
+  };
+  ($a: expr, DataType::Null) => { 0i64 }; // or None must check later
+  ($a: expr, DataType::Unknown) => { 0i64 }; // or None must check later
+  ($a: expr, DataType:: $t: ident) => { 0i64 } // or None must check later
+}
+// pub from_any;
+
+/// to anyvalue from primitive value and datatype
 /// let a = to_any!(3, DataType::UInt64);
 /// let b = to_any!("X", DataType::Utf8);
 #[macro_export]
